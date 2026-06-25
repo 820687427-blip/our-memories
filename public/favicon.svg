@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <linearGradient id="heartGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#e64980;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#d6336c;stop-opacity:1" />
+    </linearGradient>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#d6336c" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+  <!-- 背景圆 -->
+  <circle cx="50" cy="50" r="48" fill="url(#heartGrad)" filter="url(#shadow)"/>
+  <!-- 爱心 -->
+  <path d="M50 75 C25 55, 10 40, 10 25 C10 14, 20 8, 30 12 C37 15, 42 20, 50 30 C58 20, 63 15, 70 12 C80 8, 90 14, 90 25 C90 40, 75 55, 50 75Z"
+        fill="white" transform="scale(0.65) translate(27, 22)"/>
+</svg>

@@ -1,0 +1,77 @@
+---
+// 在这里设置你们的纪念日（相识/在一起的第一天）
+const START_DATE = '2018-03-15'; // 修改为你们的日期
+---
+
+<div class="love-counter">
+  <div class="love-counter-card">
+    <div class="counter-label">我们已经在一起</div>
+    <div class="counter-number" id="loveDays">--</div>
+    <div class="counter-label">天</div>
+    <div class="counter-since">自从 {START_DATE}</div>
+  </div>
+</div>
+
+<script>
+  const startDate = new Date('{START_DATE}');
+  const counterEl = document.getElementById('loveDays');
+
+  function updateCounter() {
+    const now = new Date();
+    const diff = Math.floor((now.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
+    if (counterEl) {
+      counterEl.textContent = diff.toLocaleString();
+    }
+  }
+
+  updateCounter();
+  setInterval(updateCounter, 60000); // 每分钟更新
+</script>
+
+<style>
+  .love-counter {
+    text-align: center;
+    padding: 20px;
+  }
+
+  .love-counter-card {
+    display: inline-block;
+    background: var(--color-card);
+    border-radius: var(--radius);
+    padding: 28px 48px;
+    box-shadow: var(--shadow-md);
+    border: 2px solid var(--color-rose-light);
+  }
+
+  .counter-label {
+    font-size: 1.1rem;
+    color: var(--color-text-light);
+    font-family: 'Noto Serif SC', serif;
+  }
+
+  .counter-number {
+    font-size: 3.5rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--color-rose), #e64980);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-family: 'Dancing Script', 'Noto Serif SC', cursive;
+    line-height: 1.2;
+  }
+
+  .counter-since {
+    margin-top: 8px;
+    font-size: 0.9rem;
+    color: var(--color-text-light);
+  }
+
+  @media (max-width: 768px) {
+    .love-counter-card {
+      padding: 20px 28px;
+    }
+    .counter-number {
+      font-size: 2.5rem;
+    }
+  }
+</style>

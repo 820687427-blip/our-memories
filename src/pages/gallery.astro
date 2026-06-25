@@ -1,0 +1,115 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const memories = await getCollection('memories');
+// 只显示有图片的回忆
+const memoriesWithImages = memories
+  .filter(m => m.data.image)
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+function formatDate(d: Date): string {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${y}年${m}月${day}日`;
+}
+---
+
+<BaseLayout title="相册" description="用照片记录我们的美好时光">
+  <h1 class="page-title">📷 我们的相册</h1>
+  <p class="page-subtitle">每一张照片，都是一个故事</p>
+
+  {
+    memoriesWithImages.length === 0 ? (
+      <div class="container">
+        <div class="empty-state">
+          <div class="empty-icon">📷</div>
+          <h3>相册还是空的</h3>
+          <p>在回忆中添加照片，它们就会出现在这里</p>
+        </div>
+      </div>
+    ) : (
+      <div class="container">
+        <div class="gallery-grid">
+          {memoriesWithImages.map((memory) => (
+            <div
+              class="gallery-item fade-in"
+              onclick={`openLightbox('${memory.data.image}', '${memory.data.title}', '${formatDate(memory.data.date)}')`}
+            >
+              <img
+                src={memory.data.image}
+                alt={memory.data.imageAlt || memory.data.title}
+                loading="lazy"
+              />
+              <div class="gallery-overlay">
+                <div class="gallery-title">{memory.data.title}</div>
+                <div class="gallery-date">{formatDate(memory.data.date)}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    )
+  }
+
+  <!-- 灯箱 -->
+  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <span class="lb-close">&times;</span>
+    <img src="" alt="" id="lb-img" />
+    <div class="lb-caption" id="lb-caption"></div>
+  </div>
+</BaseLayout>
+
+<script>
+  function openLightbox(src: string, title: string, date: string) {
+    const lb = document.getElementById('lightbox');
+    const img = document.getElementById('lb-img') as HTMLImageElement;
+    const caption = document.getElementById('lb-caption');
+    if (lb && img && caption) {
+      img.src = src;
+      img.alt = title;
+      caption.textContent = `${title} — ${date}`;
+      lb.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+  }
+
+  function closeLightbox() {
+    const lb = document.getElementById('lightbox');
+    if (lb) {
+      lb.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeLightbox();
+  });
+</script>
+
+<style>
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    background: var(--color-card);
+    border-radius: var(--radius);
+    border: 2px dashed var(--color-border);
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  .empty-icon {
+    font-size: 4rem;
+    margin-bottom: 16px;
+  }
+
+  .empty-state h3 {
+    color: var(--color-text-light);
+    margin-bottom: 8px;
+  }
+
+  .empty-state p {
+    color: var(--color-text-light);
+  }
+</style>

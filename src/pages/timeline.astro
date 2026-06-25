@@ -1,0 +1,95 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const memories = await getCollection('memories');
+const sortedMemories = memories.sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime()
+);
+
+function formatDate(d: Date): string {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${y}年${m}月${day}日`;
+}
+
+const categoryLabels: Record<string, string> = {
+  milestone: '人生节点',
+  travel: '一起旅行',
+  daily: '日常点滴',
+  special: '特别日子',
+};
+---
+
+<BaseLayout title="时光轴" description="按时间回顾我们的每一个珍贵瞬间">
+  <h1 class="page-title">📜 时光轴</h1>
+  <p class="page-subtitle">每一个日子，都值得被记住</p>
+
+  {
+    sortedMemories.length === 0 ? (
+      <div class="container">
+        <div class="empty-state">
+          <div class="empty-icon">📜</div>
+          <h3>时间轴还是空的</h3>
+          <p>开始添加回忆，时间轴就会慢慢丰富起来了</p>
+        </div>
+      </div>
+    ) : (
+      <div class="timeline">
+        {sortedMemories.map((memory) => (
+          <div class="timeline-item" id={memory.id}>
+            <a href={`/memories/${memory.id}`} class="timeline-card">
+              <div class="tl-date">{formatDate(memory.data.date)}</div>
+              <span class={`card-category cat-${memory.data.category}`}>
+                {categoryLabels[memory.data.category]}
+              </span>
+              <h3 class="tl-title">{memory.data.title}</h3>
+              <p class="tl-summary">{memory.data.summary}</p>
+              {
+                memory.data.image && (
+                  <img
+                    src={memory.data.image}
+                    alt={memory.data.imageAlt || memory.data.title}
+                    style="margin-top:12px;max-height:200px;width:100%;object-fit:cover;"
+                    loading="lazy"
+                  />
+                )
+              }
+            </a>
+          </div>
+        ))}
+      </div>
+    )
+  }
+</BaseLayout>
+
+<style>
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    background: var(--color-card);
+    border-radius: var(--radius);
+    border: 2px dashed var(--color-border);
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  .empty-icon {
+    font-size: 4rem;
+    margin-bottom: 16px;
+  }
+
+  .empty-state h3 {
+    color: var(--color-text-light);
+    margin-bottom: 8px;
+  }
+
+  .empty-state p {
+    color: var(--color-text-light);
+  }
+
+  .timeline-card .card-category {
+    margin-top: 4px;
+  }
+</style>

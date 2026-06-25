@@ -1,0 +1,112 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="关于我们" description="我们的爱情故事">
+  <h1 class="page-title">💝 关于我们</h1>
+  <p class="page-subtitle">这是我们的小小世界</p>
+
+  <div class="container">
+    <!-- 我们的故事 -->
+    <div class="about-card fade-in">
+      <h2 class="about-heading">📖 我们的故事</h2>
+      <div class="story-content">
+        <p>这里是属于我们的故事。</p>
+        <p>从相识、相知到相爱，每一个瞬间都值得被珍藏。</p>
+        <p>这个网站记录了我们在一起的点点滴滴——一起去过的地方、一起经历的事、一起度过的每一个平凡又不平凡的日子。</p>
+        <p>等到我们老了，坐在一起翻看这些回忆，一定会觉得很幸福吧 🥰</p>
+      </div>
+    </div>
+
+    <!-- 留言区（待配置 Giscus） -->
+    <div class="about-card fade-in">
+      <h2 class="about-heading">💬 留言板</h2>
+      <p class="about-note">
+        这里可以留下你想说的话，也可以看到访客的祝福。
+      </p>
+      <div class="comments-placeholder">
+        <p>💡 <strong>提示：</strong>留言功能需要配置 Giscus。</p>
+        <p>配置方法请看 README 文件中的说明，配好之后把下面的注释去掉就行啦。</p>
+      </div>
+      <!--
+        配置好 Giscus 之后，删除上面的 comments-placeholder，
+        然后把下面的 script 标签取消注释即可：
+
+        <script src="https://giscus.app/client.js"
+          data-repo="你的用户名/仓库名"
+          data-repo-id="你的仓库ID"
+          data-category="Announcements"
+          data-category-id="你的分类ID"
+          data-mapping="pathname"
+          data-strict="0"
+          data-reactions-enabled="1"
+          data-emit-metadata="0"
+          data-input-position="bottom"
+          data-theme="light_high_contrast"
+          data-lang="zh-CN"
+          crossorigin="anonymous"
+          async>
+        </script>
+        <div class="giscus"></div>
+      -->
+    </div>
+
+    <!-- 建站说明 -->
+    <div class="about-card fade-in">
+      <h2 class="about-heading">🛠️ 关于本站</h2>
+      <div class="story-content">
+        <p>这个网站使用 <strong>Astro</strong> 搭建，托管在 <strong>GitHub Pages</strong> 上。</p>
+        <p>完全免费、永远在线、没有任何广告。</p>
+        <p>所有的回忆都以简单的 Markdown 文件存储，永远不会丢失。</p>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .about-card {
+    background: var(--color-card);
+    border-radius: var(--radius);
+    padding: 36px;
+    margin-bottom: 28px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--color-border);
+  }
+
+  .about-heading {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .story-content p {
+    margin-bottom: 14px;
+    line-height: 2;
+    color: var(--color-text);
+    text-indent: 2em;
+  }
+
+  .story-content p:last-child {
+    margin-bottom: 0;
+  }
+
+  .about-note {
+    color: var(--color-text-light);
+    margin-bottom: 16px;
+  }
+
+  .comments-placeholder {
+    background: var(--color-rose-light);
+    border: 1px dashed var(--color-rose);
+    border-radius: var(--radius-sm);
+    padding: 24px;
+    text-align: center;
+    color: var(--color-rose-dark);
+  }
+
+  .comments-placeholder p {
+    margin-bottom: 6px;
+  }
+</style>

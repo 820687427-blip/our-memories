@@ -1,0 +1,241 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import MemoryCard from '../components/MemoryCard.astro';
+import LoveCounter from '../components/LoveCounter.astro';
+import { getCollection } from 'astro:content';
+
+const memories = await getCollection('memories');
+const latestMemories = memories
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .slice(0, 3);
+---
+
+<BaseLayout title="首页" description="记录我们在一起的每一个珍贵瞬间">
+  <!-- 主视觉区 -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1 class="hero-title fade-in">我们的珍贵回忆</h1>
+      <p class="hero-subtitle fade-in">每一个和你在一起的瞬间，都是生命里最亮的星 ✨</p>
+      <div class="fade-in">
+        <LoveCounter />
+      </div>
+      <div class="hero-buttons fade-in">
+        <a href="/timeline" class="btn btn-primary">📜 看时光轴</a>
+        <a href="/gallery" class="btn btn-outline">📷 翻翻相册</a>
+      </div>
+    </div>
+    <div class="hero-scroll">
+      <span>向下滚动</span>
+      <div class="scroll-arrow">↓</div>
+    </div>
+  </section>
+
+  <!-- 最新回忆 -->
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title">📝 最新回忆</h2>
+      <p class="section-sub">最近记录的珍贵瞬间</p>
+      <div class="memories-grid">
+        {latestMemories.length > 0 ? (
+          latestMemories.map(memory => (
+            <MemoryCard memory={memory} />
+          ))
+        ) : (
+          <div class="empty-state">
+            <div class="empty-icon">📝</div>
+            <h3>还没有回忆</h3>
+            <p>开始添加你们的第一个珍贵回忆吧！</p>
+          </div>
+        )}
+      </div>
+      {
+        memories.length > 3 && (
+          <div style="text-align:center;margin-top:32px;">
+            <a href="/timeline" class="btn btn-outline">查看全部回忆 →</a>
+          </div>
+        )
+      }
+    </div>
+  </section>
+
+  <!-- 引用区 -->
+  <section class="quote-section">
+    <div class="container">
+      <blockquote class="love-quote">
+        <p>「我愿意用一生的时间，陪你走过每一个春夏秋冬」</p>
+      </blockquote>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* 主视觉 */
+  .hero {
+    position: relative;
+    min-height: 92vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background:
+      radial-gradient(ellipse at 30% 20%, rgba(255, 182, 193, 0.3) 0%, transparent 60%),
+      radial-gradient(ellipse at 70% 60%, rgba(255, 215, 0, 0.15) 0%, transparent 60%),
+      radial-gradient(ellipse at 50% 80%, rgba(214, 51, 108, 0.1) 0%, transparent 50%),
+      linear-gradient(180deg, #fffaf7 0%, #fff5f5 50%, #fffaf7 100%);
+    padding: 40px 24px;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background:
+      radial-gradient(circle at 20% 30%, rgba(255, 182, 193, 0.15) 0%, transparent 30%),
+      radial-gradient(circle at 80% 70%, rgba(245, 158, 11, 0.1) 0%, transparent 30%);
+    animation: heroShimmer 8s ease-in-out infinite alternate;
+  }
+
+  @keyframes heroShimmer {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(20px, -10px); }
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 700px;
+  }
+
+  .hero-title {
+    font-size: 3.2rem;
+    margin-bottom: 16px;
+    background: linear-gradient(135deg, #d6336c, #e64980, #a61e4d);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-subtitle {
+    font-size: 1.2rem;
+    color: var(--color-text-light);
+    margin-bottom: 32px;
+    line-height: 1.8;
+  }
+
+  .hero-buttons {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 28px;
+  }
+
+  .hero-scroll {
+    position: absolute;
+    bottom: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    color: var(--color-text-light);
+    font-size: 0.85rem;
+    animation: bounceDown 2s ease infinite;
+  }
+
+  .scroll-arrow {
+    font-size: 1.2rem;
+  }
+
+  @keyframes bounceDown {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(8px); }
+  }
+
+  /* 通用 section */
+  .section {
+    padding: 60px 0;
+  }
+
+  .section-title {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 8px;
+  }
+
+  .section-sub {
+    text-align: center;
+    color: var(--color-text-light);
+    margin-bottom: 40px;
+    font-size: 1rem;
+  }
+
+  /* 记忆卡片网格 */
+  .memories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 28px;
+  }
+
+  /* 空状态 */
+  .empty-state {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px 20px;
+    background: var(--color-card);
+    border-radius: var(--radius);
+    border: 2px dashed var(--color-border);
+  }
+
+  .empty-icon {
+    font-size: 4rem;
+    margin-bottom: 16px;
+  }
+
+  .empty-state h3 {
+    color: var(--color-text-light);
+    margin-bottom: 8px;
+  }
+
+  .empty-state p {
+    color: var(--color-text-light);
+  }
+
+  /* 引用 */
+  .quote-section {
+    padding: 60px 24px;
+    background: linear-gradient(135deg, #fce4ec22, #fff3cd22);
+  }
+
+  .love-quote {
+    text-align: center;
+    border: none;
+  }
+
+  .love-quote p {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 1.6rem;
+    color: var(--color-rose-dark);
+    font-style: italic;
+    line-height: 1.8;
+  }
+
+  @media (max-width: 768px) {
+    .hero-title {
+      font-size: 2.2rem;
+    }
+    .hero-subtitle {
+      font-size: 1rem;
+    }
+    .memories-grid {
+      grid-template-columns: 1fr;
+    }
+    .love-quote p {
+      font-size: 1.2rem;
+    }
+  }
+</style>

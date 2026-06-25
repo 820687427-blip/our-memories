@@ -1,0 +1,40 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  memory: CollectionEntry<'memories'>;
+}
+
+const { memory } = Astro.props;
+const { title, date, category, image, imageAlt, summary } = memory.data;
+
+const categoryLabels: Record<string, string> = {
+  milestone: '人生节点',
+  travel: '一起旅行',
+  daily: '日常点滴',
+  special: '特别日子',
+};
+
+function formatDate(d: Date): string {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${y}年${m}月${day}日`;
+}
+---
+
+<a href={`/timeline/#${memory.id}`} class="memory-card fade-in">
+  {
+    image ? (
+      <img src={image} alt={imageAlt || title} class="card-img" loading="lazy" />
+    ) : (
+      <div class="card-img-placeholder">💕</div>
+    )
+  }
+  <div class="card-body">
+    <span class={`card-category cat-${category}`}>{categoryLabels[category]}</span>
+    <div class="card-date">{formatDate(date)}</div>
+    <h3 class="card-title">{title}</h3>
+    <p class="card-summary">{summary}</p>
+  </div>
+</a>
