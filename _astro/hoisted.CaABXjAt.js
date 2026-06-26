@@ -1,0 +1,1 @@
+import"./hoisted.joghmwF1.js";function t(){const e=document.getElementById("lightbox");e&&(e.classList.remove("active"),document.body.style.overflow="")}document.addEventListener("keydown",e=>{e.key==="Escape"&&t()});

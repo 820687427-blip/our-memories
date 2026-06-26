@@ -1,0 +1,1 @@
+import"./hoisted.joghmwF1.js";const o=new Date("{START_DATE}"),t=document.getElementById("loveDays");function e(){const n=Math.floor((new Date().getTime()-o.getTime())/(1e3*60*60*24));t&&(t.textContent=n.toLocaleString())}e();setInterval(e,6e4);
